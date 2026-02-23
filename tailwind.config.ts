@@ -2,7 +2,8 @@
 import { withUt } from 'uploadthing/tw';
 
 module.exports = withUt({
-  darkMode: ['class'],
+  darkMode: ['class', 'media'],
+
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',

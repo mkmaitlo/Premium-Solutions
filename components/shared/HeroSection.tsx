@@ -349,7 +349,7 @@ export const HeroSection = ({ deals = [] }: { deals?: HeroDeal[] }) => {
           </div>
 
           {/* Floating savings chip */}
-          <div className="absolute bottom-2 md:bottom-6 left-3 md:-left-8 bg-gradient-to-br from-primary to-secondary text-white rounded-2xl px-4 py-3 shadow-lg shadow-primary/30 animate-float z-20">
+          <div className="absolute bottom-2 md:bottom-6 -left-9 md:-left-8 bg-gradient-to-br from-primary to-secondary text-white rounded-2xl px-4 py-3 shadow-lg shadow-primary/30 animate-float z-20">
             <p className="text-[10px] font-semibold opacity-80 mb-0.5 whitespace-nowrap">You Save</p>
             <p className="text-xl font-extrabold leading-none whitespace-nowrap">Up to 90%</p>
           </div>
