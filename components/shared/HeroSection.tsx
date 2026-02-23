@@ -189,11 +189,12 @@ export const HeroSection = ({ deals = [] }: { deals?: HeroDeal[] }) => {
 
   // Mouse parallax on the card
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    // Skip parallax on touch screens — wastes GPU on mobile
+    if (!cardRef.current || window.matchMedia("(hover: none)").matches) return;
     const rect = cardRef.current.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / rect.width;  // -0.5 → 0.5
+    const dx = (e.clientX - cx) / rect.width;
     const dy = (e.clientY - cy) / rect.height;
     cardRef.current.style.transform = `perspective(1200px) rotateY(${dx * 12}deg) rotateX(${-dy * 8}deg) scale(1.02)`;
   }, []);
@@ -205,12 +206,14 @@ export const HeroSection = ({ deals = [] }: { deals?: HeroDeal[] }) => {
 
   return (
     <section className="relative overflow-hidden pt-24 md:pt-32 pb-20 lg:pb-32 px-4 md:px-8">
-      {/* Background blobs */}
-      <div className="absolute top-0 right-0 w-full h-full flex justify-center z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-primary/10 blur-[100px] animate-[pulse_8s_ease-in-out_infinite] mix-blend-multiply dark:mix-blend-screen" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-secondary/10 blur-[120px] animate-[pulse_10s_ease-in-out_infinite_2s] mix-blend-multiply dark:mix-blend-screen" />
-        <div className="absolute top-[30%] left-[25%] w-[30vw] h-[30vw] rounded-full bg-primary/5 blur-[80px] animate-[pulse_12s_ease-in-out_infinite_1s] mix-blend-multiply dark:mix-blend-screen" />
+      {/* Background blobs — hidden on mobile (expensive paint + mix-blend-mode) */}
+      <div className="absolute top-0 right-0 w-full h-full flex justify-center z-0 pointer-events-none overflow-hidden hidden md:flex">
+        <div className="absolute top-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-primary/10 blur-[100px] animate-[pulse_8s_ease-in-out_infinite] mix-blend-multiply dark:mix-blend-screen" style={{ willChange: "opacity" }} />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-secondary/10 blur-[120px] animate-[pulse_10s_ease-in-out_infinite_2s] mix-blend-multiply dark:mix-blend-screen" style={{ willChange: "opacity" }} />
+        <div className="absolute top-[30%] left-[25%] w-[30vw] h-[30vw] rounded-full bg-primary/5 blur-[80px] animate-[pulse_12s_ease-in-out_infinite_1s] mix-blend-multiply dark:mix-blend-screen" style={{ willChange: "opacity" }} />
       </div>
+      {/* Lightweight solid gradient for mobile instead of blobs */}
+      <div className="md:hidden absolute inset-0 z-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, hsl(var(--primary)/0.08), transparent)" }} />
 
       <div className="wrapper relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center max-w-7xl mx-auto">
 

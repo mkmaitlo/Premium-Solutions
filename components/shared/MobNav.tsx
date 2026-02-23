@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
+import { Sparkle } from "lucide-react";
 
 import Link from "next/link";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
@@ -37,15 +38,13 @@ const MobNav = ({ isAdmin }: { isAdmin?: boolean }) => {
         </SheetTrigger>
 
         <SheetContent className="flex flex-col gap-6 bg-background border-border">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-            <Image
-              src="/assets/images/logo.svg"
-              width={30}
-              height={30}
-              alt="PremiumSolutions logo"
-            />
-            <span className="font-bold text-[1.3rem] font-sans text-foreground">
+          {/* Logo — matches desktop header */}
+          <Link href="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
+            <div className="relative flex items-center justify-center p-1 rounded-md bg-gradient-to-tr from-primary/10 to-secondary/10 border border-primary/20">
+              <Sparkle className="w-5 h-5 text-primary" />
+              <div className="absolute inset-0 rounded-md bg-primary/20 blur-sm" />
+            </div>
+            <span className="font-extrabold text-[1.3rem] tracking-tight text-primary">
               Premium Solutions
             </span>
           </Link>

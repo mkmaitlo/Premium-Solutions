@@ -14,9 +14,10 @@ import { HeroSection } from "@/components/shared/HeroSection";
 import { HomeJsonLd } from "@/components/seo/HomeJsonLd";
 import { getAllDeals } from "@/lib/actions/deal.actions";
 
-// ── Page-level metadata (inherits template from root layout) ──────────────────
+// ── Page-level metadata ───────────────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "Up to 90% Off Premium Subscriptions in Pakistan",
+  // No title here — the root layout default is used:
+  // "Premium Solutions — Genuine Premium Subscriptions at Up to 90% Off in Pakistan"
   description:
     "Buy LinkedIn Premium, Canva Pro, Spotify, Adobe Creative Cloud, ChatGPT Plus, YouTube Premium and 50+ subscriptions at up to 90% off. Genuine vouchers in Pakistan, instant delivery.",
   alternates: {

@@ -17,10 +17,19 @@ export const CTASection = () => {
   const [visible, setVisible] = useState(false);
   const [particles, setParticles] = useState<ParticleData[]>([]);
 
+  // Generate particles only on desktop — each particle is an independent
+  // animated layer which overwhelms mobile GPU compositors
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
   // Generate particles only on client to avoid SSR hydration mismatch
   useEffect(() => {
+    if (isMobile) return; // skip particles on mobile
     setParticles(
-      Array.from({ length: 18 }, (_, i) => ({
+      Array.from({ length: 12 }, (_, i) => ({
         id: i,
         style: {
           width: `${Math.random() * 4 + 2}px`,
@@ -29,10 +38,11 @@ export const CTASection = () => {
           bottom: `-10px`,
           opacity: Math.random() * 0.4 + 0.1,
           animation: `floatUp ${Math.random() * 6 + 6}s linear ${Math.random() * 8}s infinite`,
+          willChange: 'transform, opacity',
         } as React.CSSProperties,
       }))
     );
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,26 +61,29 @@ export const CTASection = () => {
         style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 40%, hsl(var(--secondary)) 75%, hsl(var(--secondary)) 100%)" }}
       />
 
-      {/* Animated morphing blobs */}
+      {/* Animated morphing blobs — GPU hinted, animations disabled on mobile via CSS */}
       <div
-        className="absolute -top-1/4 -left-1/4 w-[60%] h-[130%] rounded-full opacity-30 pointer-events-none"
+        className="absolute -top-1/4 -left-1/4 w-[60%] h-[130%] rounded-full opacity-30 pointer-events-none cta-blob"
         style={{
           background: "radial-gradient(circle, hsl(var(--secondary)) 0%, transparent 70%)",
           animation: "morphBlob1 10s ease-in-out infinite alternate",
+          willChange: "transform",
         }}
       />
       <div
-        className="absolute -bottom-1/4 -right-1/4 w-[55%] h-[120%] rounded-full opacity-25 pointer-events-none"
+        className="absolute -bottom-1/4 -right-1/4 w-[55%] h-[120%] rounded-full opacity-25 pointer-events-none cta-blob"
         style={{
           background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)",
           animation: "morphBlob2 12s ease-in-out infinite alternate",
+          willChange: "transform",
         }}
       />
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[150%] rounded-full opacity-20 pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[150%] rounded-full opacity-20 pointer-events-none cta-blob"
         style={{
           background: "radial-gradient(circle, hsl(var(--secondary)) 0%, transparent 60%)",
           animation: "morphBlob1 8s ease-in-out infinite alternate-reverse",
+          willChange: "transform",
         }}
       />
 
@@ -161,12 +174,12 @@ export const CTASection = () => {
       {/* Keyframe styles */}
       <style>{`
         @keyframes morphBlob1 {
-          0%   { transform: translate(0, 0) scale(1); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-          100% { transform: translate(5%, 8%) scale(1.1); border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+          0%   { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(5%, 8%) scale(1.1); }
         }
         @keyframes morphBlob2 {
-          0%   { transform: translate(0, 0) scale(1); border-radius: 40% 60% 60% 40% / 40% 50% 60% 50%; }
-          100% { transform: translate(-6%, -5%) scale(1.12); border-radius: 60% 40% 40% 60% / 60% 40% 60% 40%; }
+          0%   { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(-6%, -5%) scale(1.12); }
         }
         @keyframes floatUp {
           0%   { transform: translateY(0) scale(1); opacity: 0.3; }
@@ -180,6 +193,10 @@ export const CTASection = () => {
         @keyframes ctaPulse {
           0%, 100% { box-shadow: 0 0 0 4px rgba(255,255,255,0.15), 0 8px 40px rgba(0,0,0,0.25); }
           50%       { box-shadow: 0 0 0 8px rgba(255,255,255,0.08), 0 8px 60px rgba(0,0,0,0.3), 0 0 30px rgba(196,181,253,0.3); }
+        }
+        /* Disable expensive border-radius morphing on mobile */
+        @media (max-width: 768px) {
+          .cta-blob { animation: none !important; }
         }
       `}</style>
     </section>

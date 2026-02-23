@@ -18,15 +18,16 @@ const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "https://premiumsolutions
 
 export const metadata: Metadata = {
   // ── Title ────────────────────────────────────────────────────────────────
-  // template: individual pages set `title` and it is injected into `%s`
+  // default: shown on the homepage (and any page that doesn't set its own title)
+  // template: other pages inject their title as %s → "Premium Solutions | Subscriptions" etc.
   title: {
-    default: "Premium Solutions — Up to 90% Off Premium Subscriptions in Pakistan",
-    template: "%s | Premium Solutions",
+    default: "Premium Solutions — Genuine Premium Subscriptions at Up to 90% Off in Pakistan",
+    template: "Premium Solutions | %s",
   },
 
   // ── Description ──────────────────────────────────────────────────────────
   description:
-    "Buy LinkedIn Premium, Canva Pro, Spotify, Adobe Creative Cloud, ChatGPT Plus, YouTube Premium and 50+ premium subscriptions at up to 90% off retail price. Genuine vouchers delivered instantly in Pakistan.",
+    "Buy LinkedIn Premium, Canva Pro, Spotify, Adobe Creative Cloud, ChatGPT Plus, YouTube Premium and 50+ subscriptions at up to 90% off. Genuine vouchers in Pakistan, instant delivery.",
 
   // ── Keywords ─────────────────────────────────────────────────────────────
   keywords: [
