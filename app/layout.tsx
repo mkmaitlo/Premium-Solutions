@@ -150,20 +150,9 @@ export default function RootLayout({
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        {/* ── Blocking theme script ── prevents flash of wrong theme on system/auto
-            dark mode. Runs synchronously before any CSS is applied, reads
-            localStorage (set by next-themes) and falls back to OS preference.
-            suppressHydrationWarning on <html> stops React complaining about
-            the class mismatch between server (no .dark) and client (has .dark). */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{
-  var t=localStorage.getItem('theme');
-  var dark=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);
-  document.documentElement.classList.toggle('dark',dark);
-}catch(e){}})();`,
-          }}
-        />
+        {/* Tell the browser this page handles dark mode itself —
+            prevents Chrome Android from applying its own "Auto-Dark" overlay */}
+        <meta name="color-scheme" content="light dark" />
       </head>
 
       <body className={poppins.variable}>
@@ -171,8 +160,8 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
+          enableColorScheme={false}
           disableTransitionOnChange
-          enableColorScheme
         >
           {/* LocalBusiness JSON-LD on every page */}
           <LocalBusinessJsonLd />
