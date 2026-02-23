@@ -1,12 +1,9 @@
-import ClientHeader from "./ClientHeader";
-import { ThemeToggle } from "../ThemeToggle";
-import { auth } from "@clerk/nextjs/server";
-
-const Header = async () => {
-  const { sessionClaims } = await auth();
-  const isAdmin = (sessionClaims?.isAdmin as boolean) ?? false;
-
-  return <ClientHeader isAdmin={isAdmin} />;
-};
-
-export default Header;
+/**
+ * Header — thin re-export.
+ *
+ * ClientHeader is now a pure "use client" component that resolves auth
+ * state on the client via Clerk's useUser hook — no server await needed.
+ * This means the header is part of the static HTML shell and renders
+ * instantly on every navigation.
+ */
+export { default } from "./ClientHeader";

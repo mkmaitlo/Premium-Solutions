@@ -1,6 +1,6 @@
 /**
  * Shimmer skeleton shown inside the <Suspense> fallback
- * while the EventsFeed async component is fetching data.
+ * while the SubscriptionsFeed async component is fetching data.
  */
 const SkeletonCard = ({ index }: { index: number }) => (
   <div

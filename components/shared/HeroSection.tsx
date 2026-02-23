@@ -8,16 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-/* ─── Data ─────────────────────────────────────────── */
 
-const DEALS = [
-  { emoji: "💼", name: "LinkedIn Premium",  original: "$39.99", price: "$3.99",  off: "90%", color: "bg-blue-500/10 text-blue-600 dark:text-blue-400"     },
-  { emoji: "🎨", name: "Canva Pro",          original: "$12.99", price: "$1.49",  off: "88%", color: "bg-purple-500/10 text-purple-600 dark:text-purple-400" },
-  { emoji: "🎵", name: "Spotify Premium",   original: "$10.99", price: "$1.29",  off: "88%", color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
-  { emoji: "🖌️", name: "Adobe Creative CC", original: "$54.99", price: "$5.49",  off: "90%", color: "bg-red-500/10 text-red-600 dark:text-red-400"           },
-  { emoji: "🤖", name: "ChatGPT Plus",       original: "$20.00", price: "$2.19",  off: "89%", color: "bg-teal-500/10 text-teal-600 dark:text-teal-400"         },
-  { emoji: "☁️", name: "Google One 2TB",    original: "$9.99",  price: "$1.09",  off: "89%", color: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-500"   },
-];
 
 // Brands for the infinite ticker
 const BRANDS = [
@@ -44,24 +35,34 @@ const TRUST_BADGES = [
   { icon: <Lock        className="w-3.5 h-3.5" />, label: "Secure Checkout"    },
 ];
 
+export type HeroDeal = {
+  _id?: string;
+  emoji: string;
+  name: string;
+  original: string;
+  price: string;
+  off: string;
+  color: string;
+};
+
 /* ─── Deal Rows sub-component ─────────────────────── */
 
-const DealRows = () => {
+const DealRows = ({ activeDeals }: { activeDeals: HeroDeal[] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % DEALS.length);
+      setActiveIndex((prev) => (prev + 1) % activeDeals.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [activeDeals.length]);
 
   return (
-    <div className="flex flex-col gap-1.5 flex-1 overflow-hidden">
-      {DEALS.map((deal, i) => (
+    <div className="flex flex-col gap-2 flex-1 overflow-y-auto overflow-x-hidden pr-2 mr-[-8px] py-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-primary/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
+      {activeDeals.map((deal, i) => (
         <div
           key={deal.name}
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all duration-500 ${
+          className={`flex items-center gap-3 px-3 py-2.5 mx-1 rounded-xl border transition-all duration-500 ${
             i === activeIndex
               ? "bg-primary/[0.07] border-primary/30 shadow-sm scale-[1.02]"
               : "bg-background/40 border-border/30"
@@ -165,7 +166,8 @@ const TypewriterWord = () => {
 
 /* ─── Main HeroSection ────────────────────────────── */
 
-export const HeroSection = () => {
+export const HeroSection = ({ deals = [] }: { deals?: HeroDeal[] }) => {
+  const activeDeals = deals;
   const [membersCount, setMembersCount] = useState(0);
   const [ratingTracker, setRatingTracker] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -250,12 +252,12 @@ export const HeroSection = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-1 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-400 fill-mode-both">
             <Button size="lg" asChild className="rounded-full bg-gradient-to-r from-primary to-secondary text-white border-0 shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-105 hover:-translate-y-1 transition-all duration-300 px-8 h-14">
-              <Link href="#events">
+              <Link href="#subscriptions">
                 Browse Subscriptions <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild className="rounded-full bg-transparent border-border/80 hover:bg-muted/50 text-foreground transition-all duration-300 px-8 h-14 group">
-              <Link href="/about">
+              <Link href={process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/923XXXXXXXXX"} target="_blank" rel="noopener noreferrer">
                 <Play className="w-4 h-4 mr-2 group-hover:text-primary transition-colors" />
                 How It Works
               </Link>
@@ -304,14 +306,14 @@ export const HeroSection = () => {
 
         {/* ── Right Column: Deals Panel ── */}
         <div
-          className="relative h-[520px] lg:h-[600px] w-full max-w-lg mx-auto lg:ml-auto z-10 animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both cursor-pointer"
+          className="relative h-[580px] md:h-[600px] w-full max-w-lg mx-auto lg:ml-auto z-10 animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both cursor-pointer"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
           {/* Main glass card */}
           <div
             ref={cardRef}
-            className="absolute top-[5%] left-[3%] right-[3%] bottom-[5%] bg-card/60 backdrop-blur-xl border border-primary/20 rounded-3xl shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.3)] animate-float p-5 flex flex-col gap-3 overflow-hidden"
+            className="absolute top-6 md:top-8 left-0 md:left-4 right-0 md:right-4 bottom-6 md:bottom-8 bg-card/60 backdrop-blur-xl border border-primary/20 rounded-3xl shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.3)] animate-float p-5 flex flex-col gap-3 overflow-hidden"
             style={{ transition: "transform 0.2s ease-out" }}
           >
             {/* Panel header */}
@@ -331,27 +333,25 @@ export const HeroSection = () => {
               </div>
             </div>
 
-            <DealRows />
+            <DealRows activeDeals={activeDeals} />
 
             {/* Bottom strip */}
-            <div className="mt-auto pt-3 border-t border-border/50 flex items-center justify-between">
-              <p className="text-xs text-muted-foreground">Avg. customer saves</p>
-              <p className="text-base font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">$340 / year</p>
+            <div className="mt-auto pt-3 border-t border-border/50 flex items-center justify-end">
+              <p className="text-base font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">save PKR 95,000 / year</p>
             </div>
-
             <div className="absolute top-0 -left-[100%] w-[200%] h-[200%] bg-gradient-to-tr from-transparent via-white/5 to-transparent skew-x-[-30deg] animate-[shimmer_4s_ease-in-out_infinite] pointer-events-none" />
           </div>
 
           {/* Floating "New Deal" badge */}
-          <div className="absolute top-[3%] right-[-8%] bg-card/90 backdrop-blur-md border border-primary/20 rounded-2xl px-3 py-2 shadow-xl animate-float-delayed flex items-center gap-2">
-            <Bell className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-bold text-foreground">New Deal Added!</span>
+          <div className="absolute top-2 md:top-3 right-3 md:-right-6 bg-card/90 backdrop-blur-md border border-primary/20 rounded-2xl px-3 py-2 shadow-xl animate-float-delayed flex items-center gap-2 z-20">
+            <Bell className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+            <span className="text-xs font-bold text-foreground whitespace-nowrap">New Deal Added!</span>
           </div>
 
           {/* Floating savings chip */}
-          <div className="absolute bottom-[12%] left-[-8%] bg-gradient-to-br from-primary to-secondary text-white rounded-2xl px-4 py-3 shadow-lg shadow-primary/30 animate-float">
-            <p className="text-[10px] font-semibold opacity-80 mb-0.5">You Save</p>
-            <p className="text-xl font-extrabold leading-none">Up to 90%</p>
+          <div className="absolute bottom-2 md:bottom-6 left-3 md:-left-8 bg-gradient-to-br from-primary to-secondary text-white rounded-2xl px-4 py-3 shadow-lg shadow-primary/30 animate-float z-20">
+            <p className="text-[10px] font-semibold opacity-80 mb-0.5 whitespace-nowrap">You Save</p>
+            <p className="text-xl font-extrabold leading-none whitespace-nowrap">Up to 90%</p>
           </div>
         </div>
 

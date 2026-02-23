@@ -146,13 +146,15 @@ export const CTASection = () => {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
 
-          <Link
-            href="/about"
+          <a
+            href="https://wa.me/923144414882?text=Hi! I want to learn more about Premium Solutions."
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm font-medium transition-colors duration-200 group"
           >
-            Learn more about our platform
+            Chat with us on WhatsApp
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          </a>
         </div>
       </div>
 

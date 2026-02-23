@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
-import NavItems from "./NavItems";
+
 import Link from "next/link";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import SectionNavLink from "./SectionNavLink";
@@ -17,11 +17,11 @@ import { useState } from "react";
 
 const PUBLIC_LINKS = [
   { label: "Why Us",           sectionId: "services"     },
-  { label: "Subscriptions",    sectionId: "events"       },
+  { label: "Subscriptions",    sectionId: "subscriptions"       },
   { label: "Customer Stories", sectionId: "testimonials" },
 ];
 
-const MobNav = () => {
+const MobNav = ({ isAdmin }: { isAdmin?: boolean }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -52,30 +52,40 @@ const MobNav = () => {
 
           <Separator />
 
-          {/* Signed-in: show admin nav items */}
+          {/* Navigation links — show public links unconditionally */}
+          <div className="flex flex-col gap-1">
+            {PUBLIC_LINKS.map((link) => (
+              <SectionNavLink
+                key={link.label}
+                sectionId={link.sectionId}
+                label={link.label}
+                className="w-full text-left px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                onNavigate={() => setOpen(false)}
+              >
+                {link.label}
+              </SectionNavLink>
+            ))}
+          </div>
+
+          {/* Signed-in: conditionally show Admin Panel */}
           <SignedIn>
-            <NavItems />
+            {isAdmin && (
+              <div className="flex flex-col gap-1 mt-1">
+                <Link 
+                  href="/dashboard"
+                  className="w-full text-left px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                  onClick={() => setOpen(false)}
+                >
+                  Admin Panel
+                </Link>
+              </div>
+            )}
           </SignedIn>
 
-          {/* Signed-out: show public section links + auth buttons */}
+          {/* Signed-out: show auth buttons */}
           <SignedOut>
-            <div className="flex flex-col gap-1">
-              {PUBLIC_LINKS.map((link) => (
-                <SectionNavLink
-                  key={link.label}
-                  sectionId={link.sectionId}
-                  label={link.label}
-                  className="w-full text-left px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                  onNavigate={() => setOpen(false)}
-                >
-                  {link.label}
-                </SectionNavLink>
-              ))}
-            </div>
-
             <Separator />
-
-            <div className="flex flex-col gap-3 mt-auto">
+            <div className="flex flex-col gap-3 mt-auto pt-4">
               <Button
                 asChild
                 variant="outline"

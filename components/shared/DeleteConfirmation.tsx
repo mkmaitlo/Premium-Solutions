@@ -2,7 +2,7 @@
 
 import { useTransition } from 'react'
 import { usePathname } from 'next/navigation'
-import Image from 'next/image'
+import { Trash2 } from 'lucide-react'
 
 import {
   AlertDialog,
@@ -16,23 +16,23 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 
-import { deleteEvent } from '@/lib/actions/event.actions'
+import { deleteEvent } from '@/lib/actions/subscription.actions'
 
-export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
+export const DeleteConfirmation = ({ subscriptionId }: { subscriptionId: string }) => {
   const pathname = usePathname()
   let [isPending, startTransition] = useTransition()
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <Image src="/assets/icons/delete.svg" alt="edit" width={20} height={20} />
+      <AlertDialogTrigger className="p-2.5 rounded-full bg-card/90 backdrop-blur-sm shadow-sm border border-border/50 hover:bg-destructive/10 hover:border-destructive/30 hover:shadow-md transition-all duration-300 group">
+        <Trash2 className="w-4 h-4 text-muted-foreground group-hover:text-destructive group-hover:scale-110 transition-all duration-300" />
       </AlertDialogTrigger>
 
       <AlertDialogContent className="bg-white">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure you want to delete?</AlertDialogTitle>
           <AlertDialogDescription className="p-regular-16 text-grey-600">
-            This will permanently delete this event
+            This will permanently delete this subscription
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -42,7 +42,7 @@ export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
           <AlertDialogAction
             onClick={() =>
               startTransition(async () => {
-                await deleteEvent({ eventId, path: pathname })
+                await deleteEvent({ subscriptionId, path: pathname })
               })
             }>
             {isPending ? 'Deleting...' : 'Delete'}

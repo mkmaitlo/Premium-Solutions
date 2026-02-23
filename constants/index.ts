@@ -4,16 +4,16 @@ export const headerLinks = [
     route: '/',
   },
   {
-    label: 'Create Product',
-    route: '/events/create',
+    label: 'Create Subscription',
+    route: '/subscriptions/create',
   },
   {
-    label: 'My Profile',
-    route: '/profile',
+    label: 'My Subscriptions',
+    route: '/my-subscriptions',
   },
 ]
 
-export const eventDefaultValues = {
+export const subscriptionDefaultValues = {
   title: '',
   description: '',
   location: '',

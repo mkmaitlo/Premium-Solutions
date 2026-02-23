@@ -15,10 +15,10 @@ export type UpdateUserParams = {
   photo: string
 }
 
-// ====== EVENT PARAMS
-export type CreateEventParams = {
+// ====== SUBSCRIPTION PARAMS
+export type CreateSubscriptionParams = {
   userId: string
-  event: {
+  subscription: {
     title: string
     description: string
     imageUrl: string
@@ -27,9 +27,9 @@ export type CreateEventParams = {
   path: string
 }
 
-export type UpdateEventParams = {
+export type UpdateSubscriptionParams = {
   userId: string
-  event: {
+  subscription: {
     _id: string
     title: string
     imageUrl: string
@@ -39,32 +39,32 @@ export type UpdateEventParams = {
   path: string
 }
 
-export type DeleteEventParams = {
-  eventId: string
+export type DeleteSubscriptionParams = {
+  subscriptionId: string
   path: string
 }
 
-export type GetAllEventsParams = {
+export type GetAllSubscriptionsParams = {
   query: string
   category: string
   limit: number
   page: number
 }
 
-export type GetEventsByUserParams = {
+export type GetSubscriptionsByUserParams = {
   userId: string
   limit?: number
   page: number
 }
 
-export type GetRelatedEventsByCategoryParams = {
+export type GetRelatedSubscriptionsByCategoryParams = {
   categoryId: string
-  eventId: string
+  subscriptionId: string
   limit?: number
   page: number | string
 }
 
-export type Event = {
+export type Subscription = {
   _id: string
   title: string
   description: string
@@ -93,8 +93,8 @@ export type CreateCategoryParams = {
 
 // ====== ORDER PARAMS
 export type CheckoutOrderParams = {
-  eventTitle: string
-  eventId: string
+  subscriptionTitle: string
+  subscriptionId: string
   price: string
   isFree: boolean
   buyerId: string
@@ -102,14 +102,14 @@ export type CheckoutOrderParams = {
 
 export type CreateOrderParams = {
   stripeId: string
-  eventId: string
+  subscriptionId: string
   buyerId: string
   totalAmount: string
   createdAt: Date
 }
 
 export type GetOrdersByEventParams = {
-  eventId: string
+  subscriptionId: string
   searchString: string
 }
 

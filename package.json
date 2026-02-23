@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.38.1",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-checkbox": "^1.1.2",
@@ -20,7 +23,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@stripe/stripe-js": "^4.10.0",
     "@types/nprogress": "^0.2.3",
-    "@uploadthing/react": "^7.3.3",
+    "@uploadthing/react": "^7.1.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
@@ -39,13 +42,15 @@
     "svix": "^1.37.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.7.4",
+    "uploadthing": "^7.4.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
+    "eslint": "9.39.3",
+    "eslint-config-next": "16.1.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

@@ -1,44 +1,22 @@
-import { IEvent } from '@/lib/database/models/event.model'
+import { ISubscription } from '@/lib/database/models/subscription.model'
 import Link from 'next/link'
 import React from 'react'
 import { DeleteConfirmation } from './DeleteConfirmation'
-import { ArrowRight, Star, Edit } from 'lucide-react'
+import { ArrowRight, Star, Pencil } from 'lucide-react'
 import Image from 'next/image'
 
 type CardProps = {
-  event: IEvent,
-  userId?: string
+  subscription: ISubscription,
   index?: number
+  isAdmin?: boolean
 }
 
-// Gives each card a branded gradient accent based on title keywords
-const getCardGradient = (title: string) => {
-  const t = title.toLowerCase();
-  if (t.includes('microsoft') || t.includes('office') || t.includes('365'))
-    return 'from-[#0078d4]/20 via-primary/10 to-transparent';
-  if (t.includes('chatgpt') || t.includes('openai') || t.includes('ai'))
-    return 'from-emerald-500/20 via-primary/10 to-transparent';
-  if (t.includes('linkedin'))
-    return 'from-[#0A66C2]/20 via-primary/10 to-transparent';
-  if (t.includes('grammarly'))
-    return 'from-green-500/20 via-primary/10 to-transparent';
-  if (t.includes('netflix'))
-    return 'from-red-600/20 via-primary/10 to-transparent';
-  if (t.includes('adobe'))
-    return 'from-red-500/20 via-primary/10 to-transparent';
-  if (t.includes('spotify'))
-    return 'from-green-400/20 via-primary/10 to-transparent';
-  // Default gradient
-  return 'from-primary/15 via-secondary/10 to-transparent';
-};
 
-const Card = ({ event, userId, index = 0 }: CardProps) => {
-  const isEventCreator = userId && event.organizer?._id
-    ? userId === event.organizer._id.toString()
-    : false;
 
-  const isFree = event.price === "0" || event.price === "Free" || !event.price;
-  const gradient = getCardGradient(event.title);
+const Card = ({ subscription, index = 0, isAdmin = false }: CardProps) => {
+  const showAdminActions = isAdmin;
+
+  const isFree = subscription.price === "0" || subscription.price === "Free" || !subscription.price;
 
   return (
     <div
@@ -51,11 +29,11 @@ const Card = ({ event, userId, index = 0 }: CardProps) => {
 
       {/* Card Header: Full clear image */}
       <div className="relative w-full aspect-[4/3] bg-muted overflow-hidden">
-        <Link href={`/events/${event._id}`} className="absolute inset-0">
-          {event.imageUrl && (
+        <Link href={`/subscriptions/${subscription._id}`} className="absolute inset-0">
+          {subscription.imageUrl && (
             <Image
-              src={event.imageUrl}
-              alt={event.title}
+              src={subscription.imageUrl}
+              alt={subscription.title}
               fill
               className="object-contain transition-transform duration-500 group-hover:scale-105"
             />
@@ -72,14 +50,12 @@ const Card = ({ event, userId, index = 0 }: CardProps) => {
         </div>
 
         {/* Creator actions */}
-        {isEventCreator && (
+        {showAdminActions && (
           <div className="absolute top-3 right-3 z-10 flex gap-2">
-            <Link href={`/events/${event._id}`} className="p-2 rounded-full bg-white/90 dark:bg-card/90 backdrop-blur-sm shadow border border-border hover:bg-primary/10 transition-colors">
-              <Edit className="w-3.5 h-3.5 text-primary" />
+            <Link href={`/subscriptions/${subscription._id}/update`} className="flex items-center justify-center p-2.5 rounded-full bg-card/90 backdrop-blur-sm shadow-sm border border-border/50 hover:bg-primary/10 hover:border-primary/30 hover:shadow-md transition-all duration-300 group cursor-pointer">
+              <Pencil className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
             </Link>
-            <div className="p-2 rounded-full bg-white/90 dark:bg-card/90 backdrop-blur-sm shadow border border-border">
-              <DeleteConfirmation eventId={event._id.toString()} />
-            </div>
+            <DeleteConfirmation subscriptionId={subscription._id.toString()} />
           </div>
         )}
       </div>
@@ -87,19 +63,24 @@ const Card = ({ event, userId, index = 0 }: CardProps) => {
       {/* Card Body */}
       <div className="flex flex-col gap-3 p-5 flex-1">
         <div className="flex items-start justify-between gap-3">
-          <Link href={`/events/${event._id}`}>
+          <Link href={`/subscriptions/${subscription._id}`}>
             <h3 className="font-bold text-base text-foreground leading-snug line-clamp-2 group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300">
-              {event.title}
+              {subscription.title}
             </h3>
           </Link>
         </div>
 
-        {/* Stars decorative */}
-        <div className="flex gap-0.5">
-          {[1,2,3,4,5].map(i => (
-            <Star key={i} className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+        {/* Stars dynamic algorithm */}
+        <div className="flex items-center gap-0.5 group/rating">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star 
+              key={i} 
+              className={`w-3.5 h-3.5 ${(subscription.averageRating ?? 5.0) >= i ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/30 fill-transparent'}`} 
+            />
           ))}
-          <span className="text-xs text-muted-foreground ml-1.5 self-center">5.0</span>
+          <span className="text-xs text-muted-foreground ml-1.5 self-center mt-[1px]">
+            {Number(subscription.averageRating ?? 5.0).toFixed(1)} ({subscription.reviewCount ?? 0})
+          </span>
         </div>
 
         {/* Price Row */}
@@ -109,14 +90,14 @@ const Card = ({ event, userId, index = 0 }: CardProps) => {
               <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">Free</span>
             ) : (
               <span className="text-xl font-extrabold text-foreground">
-                <span className="text-sm font-semibold text-muted-foreground mr-1">Rs</span>
-                {event.price}
+                <span className="text-sm font-semibold text-muted-foreground mr-1">PKR</span>
+                {Number(subscription.price).toLocaleString()}
               </span>
             )}
           </div>
 
           <Link
-            href={`/events/${event._id}`}
+            href={`/subscriptions/${subscription._id}`}
             className="inline-flex items-center gap-1 text-sm font-semibold text-primary dark:text-primary hover:gap-2 transition-all duration-200 group/link"
           >
             View Details

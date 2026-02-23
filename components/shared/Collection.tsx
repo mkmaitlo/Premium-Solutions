@@ -1,11 +1,11 @@
-import { IEvent } from "@/lib/database/models/event.model";
+import { ISubscription } from "@/lib/database/models/subscription.model";
 import { auth } from "@clerk/nextjs/server";
 import Card from "./Card";
 import Pagination from "./Pagination";
 import { Sparkles } from "lucide-react";
 
 type CollectionProps = {
-  data: IEvent[];
+  data: ISubscription[];
   emptyTitle: string;
   emptyStateSubtext: string;
   limit: number;
@@ -23,16 +23,16 @@ const Collection = async ({
   urlParamName,
 }: CollectionProps) => {
   const { sessionClaims } = await auth();
-  const userId = sessionClaims?.userId as string;
+  const isAdmin = (sessionClaims?.isAdmin as boolean) ?? false;
 
   return (
     <>
       {data.length > 0 ? (
         <div className="flex flex-col items-center gap-10">
           <ul className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {data.map((event, index) => (
-              <li key={event._id.toString()} className="flex justify-center">
-                <Card event={event} userId={userId} index={index} />
+            {data.map((subscription, index) => (
+              <li key={subscription._id.toString()} className="flex justify-center">
+                <Card subscription={subscription} index={index} isAdmin={isAdmin} />
               </li>
             ))}
           </ul>
