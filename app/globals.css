@@ -64,44 +64,6 @@
     --input: 240 26.8% 24.1%;
     --ring: 238.7 83.5% 66.7%;
   }
-
-  /* ── System dark mode via media query ──────────────────────────────────────
-     next-themes adds the .dark class via JS (client-side), but on mobile the
-     JS hydration can be slow. This media query makes the CSS variables flip
-     IMMEDIATELY when the OS is in dark mode, even before JS runs.
-     next-themes will then keep them in sync via the class approach.
-  */
-  @media (prefers-color-scheme: dark) {
-    :root:not(.light) {
-      --background: 240 26.8% 8%;
-      --foreground: 226.5 100% 93.9%;
-
-      --card: 240 27.8% 14.1%;
-      --card-foreground: 226.5 100% 93.9%;
-
-      --popover: 240 27.8% 14.1%;
-      --popover-foreground: 226.5 100% 93.9%;
-
-      --primary: 238.7 83.5% 66.7%;
-      --primary-foreground: 0 0% 100%;
-
-      --secondary: 258.3 89.5% 66.3%;
-      --secondary-foreground: 0 0% 100%;
-
-      --muted: 240 27.8% 24%;
-      --muted-foreground: 217.9 10.6% 64.9%;
-
-      --accent: 240 27.8% 24%;
-      --accent-foreground: 226.5 100% 93.9%;
-
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 0 0% 100%;
-
-      --border: 240 26.8% 24.1%;
-      --input: 240 26.8% 24.1%;
-      --ring: 238.7 83.5% 66.7%;
-    }
-  }
 }
 
 * {
