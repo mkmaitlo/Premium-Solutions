@@ -49,6 +49,7 @@ const MobNav = ({ isAdmin }: { isAdmin?: boolean }) => {
             </span>
           </Link>
 
+
           <Separator />
 
           {/* Navigation links — show public links unconditionally */}
