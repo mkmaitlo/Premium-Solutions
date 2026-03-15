@@ -47,13 +47,21 @@ function StarPicker({
 
 // ─── User Avatar ──────────────────────────────────────────────────────────────
 function ReviewAvatar({ user }: { user: AdminReviewRow["user"] }) {
+  if (!user) {
+    return (
+      <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-black text-white flex-shrink-0 bg-muted-foreground/30">
+        ??
+      </div>
+    );
+  }
+
   const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
   const hue = ((user._id?.charCodeAt(0) ?? 0) * 37) % 360;
   if (user.photo) {
     return (
       <Image
         src={user.photo}
-        alt={user.firstName}
+        alt={user.firstName || "Unknown User"}
         width={40}
         height={40}
         className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 flex-shrink-0"
@@ -157,7 +165,7 @@ function EditModal({
               <div>
                 <h2 className="text-base font-black text-foreground">Edit Review</h2>
                 <p className="text-xs text-muted-foreground">
-                  {review.user.firstName} {review.user.lastName} · {review.subscription.title}
+                  {review.user?.firstName || "Unknown"} {review.user?.lastName || "User"} · {review.subscription?.title || "Unknown Subscription"}
                 </p>
               </div>
             </div>
@@ -295,9 +303,9 @@ function DeleteModal({
           <p className="text-sm text-muted-foreground leading-relaxed">
             You are about to permanently delete the review by{" "}
             <span className="font-bold text-foreground">
-              {review.user.firstName} {review.user.lastName}
+              {review.user?.firstName || "Unknown"} {review.user?.lastName || "User"}
             </span>{" "}
-            for <span className="font-bold text-foreground">{review.subscription.title}</span>.
+            for <span className="font-bold text-foreground">{review.subscription?.title || "Unknown Subscription"}</span>.
             This action <span className="text-destructive font-bold">cannot be undone</span>.
           </p>
 
@@ -357,10 +365,10 @@ export default function AdminReviewsClient({
     const q = search.toLowerCase();
     const matchSearch =
       !q ||
-      r.user.firstName.toLowerCase().includes(q) ||
-      r.user.lastName.toLowerCase().includes(q) ||
-      r.subscription.title.toLowerCase().includes(q) ||
-      r.comment.toLowerCase().includes(q);
+      r.user?.firstName?.toLowerCase().includes(q) ||
+      r.user?.lastName?.toLowerCase().includes(q) ||
+      r.subscription?.title?.toLowerCase().includes(q) ||
+      r.comment?.toLowerCase().includes(q);
     const matchRating = ratingFilter === "all" || r.rating === ratingFilter;
     return matchSearch && matchRating;
   });
@@ -532,7 +540,7 @@ export default function AdminReviewsClient({
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-bold text-foreground text-sm">
-                          {review.user.firstName} {review.user.lastName}
+                          {review.user?.firstName || "Unknown"} {review.user?.lastName || "User"}
                         </span>
                         <span
                           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold border ${ratingBg(review.rating)}`}
@@ -542,7 +550,7 @@ export default function AdminReviewsClient({
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
-                        <span className="font-medium text-foreground/70">{review.subscription.title}</span>
+                        <span className="font-medium text-foreground/70">{review.subscription?.title || "Unknown Subscription"}</span>
                         <span>·</span>
                         <span>
                           {new Date(review.createdAt).toLocaleDateString(undefined, {

@@ -126,11 +126,11 @@ export type AdminReviewRow = {
     lastName: string;
     photo: string;
     email?: string;
-  };
+  } | null;
   subscription: {
     _id: string;
     title: string;
-  };
+  } | null;
 };
 
 export async function getAllReviewsAdmin(): Promise<AdminReviewRow[]> {
