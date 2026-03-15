@@ -77,7 +77,7 @@
 /* Offset anchor jumps so they don't hide under the fixed header */
 html {
   scroll-padding-top: 80px;
-  /* Prevent elastic scroll bounce jank on iOS Safari */
+  /* Prevent elastic scroll  bounce jank on iOS Safari */
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
