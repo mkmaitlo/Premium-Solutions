@@ -12,8 +12,6 @@ import CollectionSkeleton from "@/components/shared/CollectionSkeleton";
 import Search from "@/components/shared/Search";
 import { HeroSection } from "@/components/shared/HeroSection";
 import { HomeJsonLd } from "@/components/seo/HomeJsonLd";
-import { getAllDeals } from "@/lib/actions/deal.actions";
-
 // ── Page-level metadata ───────────────────────────────────────────────────────
 export const metadata: Metadata = {
   // No title here — the root layout default is used:
@@ -51,21 +49,24 @@ export default async function Home({ searchParams }: SearchParamProps) {
   const searchText = (resolvedSearchParams?.query as string) || "";
   const category = (resolvedSearchParams?.category as string) || "";
 
-  // Lightweight fetch for JSON-LD structured data only (cached)
-  const deals = await getAllDeals();
-
   return (
     <div className="flex flex-col min-h-screen">
       {/* ── JSON-LD Structured Data (injected server-side, 0 client JS) */}
-      <HomeJsonLd deals={deals} />
+      <Suspense fallback={null}>
+        <HomeJsonLd />
+      </Suspense>
 
       {/* ── 1. HERO ──────────────────────────────────────────────
           Static hero text renders instantly (no DB wait).
-          HeroDealsPanel streams in the deals card separately.
+          HeroDealsPanel streams in the deals card separately as a prop.
       ───────────────────────────────────────────────────────── */}
-      <Suspense fallback={<HeroSection deals={[]} />}>
-        <HeroDealsPanel />
-      </Suspense>
+      <HeroSection 
+        rightPanel={
+          <Suspense fallback={<HeroDealsSkeleton />}>
+            <HeroDealsPanel />
+          </Suspense>
+        }
+      />
 
       {/* ── 2. FEATURES ─────────────────────────────────────────
           Fully static — renders from the initial HTML payload.

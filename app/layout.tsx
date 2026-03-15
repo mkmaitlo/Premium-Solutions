@@ -110,9 +110,9 @@ export const metadata: Metadata = {
 
   // ── Icons ────────────────────────────────────────────────────────────────
   icons: {
-    icon: "/assets/images/logo.svg",
-    shortcut: "/assets/images/logo.svg",
-    apple: "/assets/images/logo.svg",
+    icon: "/assets/images/premiumsolutions.png",
+    shortcut: "/assets/images/premiumsolutions.png",
+    apple: "/assets/images/premiumsolutions.png",
   },
 
   // ── Manifest ─────────────────────────────────────────────────────────────

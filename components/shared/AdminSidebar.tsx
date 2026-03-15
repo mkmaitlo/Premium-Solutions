@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   ArrowLeft,
   PlusCircle,
@@ -42,10 +43,9 @@ export default function AdminSidebar() {
       {/* Logo / Brand */}
       <div className="flex items-center gap-3 pb-2">
         <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)))" }}
+          className="w-9 h-9 relative overflow-hidden flex items-center justify-center flex-shrink-0"
         >
-          <Sparkles className="w-5 h-5 text-white" />
+          <Image src="/assets/images/premiumsolutions.png" alt="Admin Logo" fill className="object-contain" />
         </div>
         <div>
           <p className="text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary uppercase tracking-[0.2em]">
@@ -159,10 +159,9 @@ export default function AdminSidebar() {
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-card/80 backdrop-blur-2xl border-b border-border/50 z-[40] flex items-center justify-between px-5 shadow-[0_4px_30px_hsl(var(--primary)/0.08)]">
         <div className="flex items-center gap-2.5">
           <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)))" }}
+            className="w-7 h-7 relative overflow-hidden flex items-center justify-center"
           >
-            <Sparkles className="w-4 h-4 text-white" />
+            <Image src="/assets/images/premiumsolutions.png" alt="Logo" fill className="object-contain" />
           </div>
           <p className="text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary uppercase tracking-[0.15em]">
             Admin Panel

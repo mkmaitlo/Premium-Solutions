@@ -40,9 +40,13 @@ const MobNav = ({ isAdmin }: { isAdmin?: boolean }) => {
         <SheetContent className="flex flex-col gap-6 bg-background border-border">
           {/* Logo — matches desktop header */}
           <Link href="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
-            <div className="relative flex items-center justify-center p-1 rounded-md bg-gradient-to-tr from-primary/10 to-secondary/10 border border-primary/20">
-              <Sparkle className="w-5 h-5 text-primary" />
-              <div className="absolute inset-0 rounded-md bg-primary/20 blur-sm" />
+            <div className="relative flex items-center justify-center w-8 h-8 overflow-hidden">
+              <Image 
+                src="/assets/images/premiumsolutions.png" 
+                alt="Premium Solutions Logo" 
+                fill
+                className="object-contain"
+              />
             </div>
             <span className="font-extrabold text-[1.3rem] tracking-tight text-primary">
               Premium Solutions

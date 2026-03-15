@@ -8,7 +8,10 @@
  *
  * Renders as a server component — zero JS overhead on the client.
  */
-export function HomeJsonLd({ deals }: { deals: { name: string }[] }) {
+import { getAllDeals } from "@/lib/actions/deal.actions";
+
+export async function HomeJsonLd() {
+  const deals = await getAllDeals();
   const baseUrl =
     process.env.NEXT_PUBLIC_SERVER_URL || "https://premiumsolutions.store";
 
@@ -17,7 +20,7 @@ export function HomeJsonLd({ deals }: { deals: { name: string }[] }) {
     "@type": "Organization",
     name: "Premium Solutions",
     url: baseUrl,
-    logo: `${baseUrl}/assets/images/logo.svg`,
+    logo: `${baseUrl}/assets/images/premiumsolutions.png`,
     sameAs: [],
     contactPoint: {
       "@type": "ContactPoint",
@@ -58,7 +61,7 @@ export function HomeJsonLd({ deals }: { deals: { name: string }[] }) {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Premium Subscriptions",
-      itemListElement: deals.map((deal, i) => ({
+      itemListElement: deals.map((deal: any, i: number) => ({
         "@type": "Offer",
         position: i + 1,
         itemOffered: {

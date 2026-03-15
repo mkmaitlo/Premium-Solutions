@@ -6,9 +6,9 @@
  * Wrap this in <Suspense fallback={<HeroDealsSkeleton />}>.
  */
 import { getAllDeals } from "@/lib/actions/deal.actions";
-import { HeroSection } from "./HeroSection";
+import { HeroDealsCard } from "./HeroSection";
 
 export async function HeroDealsPanel() {
   const deals = await getAllDeals();
-  return <HeroSection deals={deals} />;
+  return <HeroDealsCard deals={deals} />;
 }

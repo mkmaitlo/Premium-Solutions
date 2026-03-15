@@ -15,7 +15,16 @@ const nextConfig = {
                 hostname: 'images.clerk.dev',
             }
         ]
-    }
+    },
+    async redirects() {
+        return [
+            {
+                source: '/subscriptions',
+                destination: '/#subscriptions',
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

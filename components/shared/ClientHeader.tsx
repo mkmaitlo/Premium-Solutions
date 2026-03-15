@@ -17,6 +17,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Sparkle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -63,9 +64,13 @@ export default function ClientHeader() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative flex items-center justify-center p-1 rounded-md bg-gradient-to-tr from-primary/10 to-secondary/10 border border-primary/20">
-            <Sparkle className="w-5 h-5 text-primary animate-pulse" />
-            <div className="absolute inset-0 rounded-md bg-primary/20 blur-sm group-hover:bg-primary/40 transition-colors duration-500" />
+          <div className="relative flex items-center justify-center w-10 h-10 overflow-hidden">
+            <Image 
+              src="/assets/images/premiumsolutions.png" 
+              alt="Premium Solutions Logo" 
+              fill
+              className="object-contain"
+            />
           </div>
           <span className="font-extrabold text-[1.4rem] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary transition-all duration-300 group-hover:opacity-80">
             Premium Solutions

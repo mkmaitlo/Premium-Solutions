@@ -16,24 +16,17 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/subscriptions/"],
+        allow: ["/"],
         disallow: [
-          "/dashboard",
-          "/dashboard/",
-          "/deals",
-          "/reviews",
-          "/my-subscriptions",
           "/api/",
-          "/sign-in",
-          "/sign-up",
           "/*?page=",    // Paginated duplicates — pass-through via canonical instead
         ],
       },
       {
         // Bing explicitly
         userAgent: "Bingbot",
-        allow: ["/", "/subscriptions/"],
-        disallow: ["/dashboard/", "/api/"],
+        allow: ["/"],
+        disallow: ["/api/"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

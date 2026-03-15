@@ -57,6 +57,28 @@ const DealRows = ({ activeDeals }: { activeDeals: HeroDeal[] }) => {
     return () => clearInterval(interval);
   }, [activeDeals.length]);
 
+  if (!activeDeals || activeDeals.length === 0) {
+    return (
+      <div className="flex flex-col gap-2 flex-1 overflow-y-auto overflow-x-hidden pr-2 mr-[-8px] py-1">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-3 px-3 py-2.5 mx-1 rounded-xl border border-border/30 bg-background/40 animate-pulse"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <div className="w-8 h-8 rounded-lg bg-muted flex-shrink-0" />
+            <div className="flex-1 min-w-0 flex flex-col gap-1">
+              <div className="h-3 w-3/4 rounded bg-muted" />
+              <div className="h-2.5 w-1/2 rounded bg-muted" />
+            </div>
+            <div className="h-4 w-16 rounded bg-muted flex-shrink-0" />
+            <div className="h-5 w-10 rounded-md bg-muted flex-shrink-0" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2 flex-1 overflow-y-auto overflow-x-hidden pr-2 mr-[-8px] py-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-primary/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
       {activeDeals.map((deal, i) => (
@@ -68,7 +90,7 @@ const DealRows = ({ activeDeals }: { activeDeals: HeroDeal[] }) => {
               : "bg-background/40 border-border/30"
           }`}
         >
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-base flex-shrink-0 ${deal.color.split(" ")[0]}`}>
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-base flex-shrink-0 ${deal.color?.split(" ")[0] || "bg-muted"}`}>
             <span>{deal.emoji}</span>
           </div>
           <div className="flex-1 min-w-0">
@@ -80,7 +102,7 @@ const DealRows = ({ activeDeals }: { activeDeals: HeroDeal[] }) => {
               {deal.price}<span className="text-[10px] font-normal text-muted-foreground">/mo</span>
             </p>
           </div>
-          <div className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold flex-shrink-0 ${deal.color}`}>
+          <div className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold flex-shrink-0 ${deal.color || "text-muted"}`}>
             -{deal.off}
           </div>
         </div>
@@ -166,26 +188,9 @@ const TypewriterWord = () => {
 
 /* ─── Main HeroSection ────────────────────────────── */
 
-export const HeroSection = ({ deals = [] }: { deals?: HeroDeal[] }) => {
+export const HeroDealsCard = ({ deals = [] }: { deals?: HeroDeal[] }) => {
   const activeDeals = deals;
-  const [membersCount, setMembersCount] = useState(0);
-  const [ratingTracker, setRatingTracker] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
-
-  // Count-up animation
-  useEffect(() => {
-    let startTimestamp: number | null = null;
-    const duration = 2000;
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      setMembersCount(Math.floor(ease * 10000));
-      setRatingTracker(Math.floor(ease * 49) / 10);
-      if (progress < 1) window.requestAnimationFrame(step);
-    };
-    window.requestAnimationFrame(step);
-  }, []);
 
   // Mouse parallax on the card
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -202,6 +207,78 @@ export const HeroSection = ({ deals = [] }: { deals?: HeroDeal[] }) => {
   const handleMouseLeave = useCallback(() => {
     if (!cardRef.current) return;
     cardRef.current.style.transform = "perspective(1200px) rotateY(0deg) rotateX(0deg) scale(1)";
+  }, []);
+
+  return (
+    <div
+      className="relative h-[580px] md:h-[600px] w-full max-w-lg mx-auto lg:ml-auto z-10 animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both cursor-pointer"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Main glass card */}
+      <div
+        ref={cardRef}
+        className="absolute top-6 md:top-8 left-0 md:left-4 right-0 md:right-4 bottom-6 md:bottom-8 bg-card/60 backdrop-blur-xl border border-primary/20 rounded-3xl shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.3)] animate-float p-5 flex flex-col gap-3 overflow-hidden"
+        style={{ transition: "transform 0.2s ease-out" }}
+      >
+        {/* Panel header */}
+        <div className="flex items-center justify-between pb-3 border-b border-border/50">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center">
+              <Tag className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-foreground leading-none">Premium Deals</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Updated live</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Live</span>
+          </div>
+        </div>
+
+        <DealRows activeDeals={activeDeals} />
+
+        {/* Bottom strip */}
+        <div className="mt-auto pt-3 border-t border-border/50 flex items-center justify-end">
+          <p className="text-base font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">save PKR 95,000 / year</p>
+        </div>
+        <div className="absolute top-0 -left-[100%] w-[200%] h-[200%] bg-gradient-to-tr from-transparent via-white/5 to-transparent skew-x-[-30deg] animate-[shimmer_4s_ease-in-out_infinite] pointer-events-none" />
+      </div>
+
+      {/* Floating "New Deal" badge */}
+      <div className="absolute top-2 md:top-3 right-3 md:-right-6 bg-card/90 backdrop-blur-md border border-primary/20 rounded-2xl px-3 py-2 shadow-xl animate-float-delayed flex items-center gap-2 z-20">
+        <Bell className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+        <span className="text-xs font-bold text-foreground whitespace-nowrap">New Deal Added!</span>
+      </div>
+
+      {/* Floating savings chip */}
+      <div className="absolute bottom-2 md:bottom-6 -left-9 md:-left-8 bg-gradient-to-br from-primary to-secondary text-white rounded-2xl px-4 py-3 shadow-lg shadow-primary/30 animate-float z-20">
+        <p className="text-[10px] font-semibold opacity-80 mb-0.5 whitespace-nowrap">You Save</p>
+        <p className="text-xl font-extrabold leading-none whitespace-nowrap">Up to 90%</p>
+      </div>
+    </div>
+  );
+};
+
+export const HeroSection = ({ rightPanel }: { rightPanel?: React.ReactNode }) => {
+  const [membersCount, setMembersCount] = useState(0);
+  const [ratingTracker, setRatingTracker] = useState(0);
+
+  // Count-up animation
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    const duration = 2000;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      setMembersCount(Math.floor(ease * 10000));
+      setRatingTracker(Math.floor(ease * 49) / 10);
+      if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
   }, []);
 
   return (
@@ -308,55 +385,7 @@ export const HeroSection = ({ deals = [] }: { deals?: HeroDeal[] }) => {
         </div>
 
         {/* ── Right Column: Deals Panel ── */}
-        <div
-          className="relative h-[580px] md:h-[600px] w-full max-w-lg mx-auto lg:ml-auto z-10 animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both cursor-pointer"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-        >
-          {/* Main glass card */}
-          <div
-            ref={cardRef}
-            className="absolute top-6 md:top-8 left-0 md:left-4 right-0 md:right-4 bottom-6 md:bottom-8 bg-card/60 backdrop-blur-xl border border-primary/20 rounded-3xl shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.3)] animate-float p-5 flex flex-col gap-3 overflow-hidden"
-            style={{ transition: "transform 0.2s ease-out" }}
-          >
-            {/* Panel header */}
-            <div className="flex items-center justify-between pb-3 border-b border-border/50">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center">
-                  <Tag className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-foreground leading-none">Premium Deals</p>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">Updated live</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Live</span>
-              </div>
-            </div>
-
-            <DealRows activeDeals={activeDeals} />
-
-            {/* Bottom strip */}
-            <div className="mt-auto pt-3 border-t border-border/50 flex items-center justify-end">
-              <p className="text-base font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">save PKR 95,000 / year</p>
-            </div>
-            <div className="absolute top-0 -left-[100%] w-[200%] h-[200%] bg-gradient-to-tr from-transparent via-white/5 to-transparent skew-x-[-30deg] animate-[shimmer_4s_ease-in-out_infinite] pointer-events-none" />
-          </div>
-
-          {/* Floating "New Deal" badge */}
-          <div className="absolute top-2 md:top-3 right-3 md:-right-6 bg-card/90 backdrop-blur-md border border-primary/20 rounded-2xl px-3 py-2 shadow-xl animate-float-delayed flex items-center gap-2 z-20">
-            <Bell className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-            <span className="text-xs font-bold text-foreground whitespace-nowrap">New Deal Added!</span>
-          </div>
-
-          {/* Floating savings chip */}
-          <div className="absolute bottom-2 md:bottom-6 -left-9 md:-left-8 bg-gradient-to-br from-primary to-secondary text-white rounded-2xl px-4 py-3 shadow-lg shadow-primary/30 animate-float z-20">
-            <p className="text-[10px] font-semibold opacity-80 mb-0.5 whitespace-nowrap">You Save</p>
-            <p className="text-xl font-extrabold leading-none whitespace-nowrap">Up to 90%</p>
-          </div>
-        </div>
+        {rightPanel}
 
       </div>
     </section>

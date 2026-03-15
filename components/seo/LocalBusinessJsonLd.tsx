@@ -43,7 +43,7 @@ export function LocalBusinessJsonLd() {
     url: baseUrl,
     logo: {
       "@type": "ImageObject",
-      url: `${baseUrl}/assets/images/logo.svg`,
+      url: `${baseUrl}/assets/images/premiumsolutions.png`,
     },
     image: `${baseUrl}/og-image.png`,
     description:

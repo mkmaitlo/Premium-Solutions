@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Sparkles, Mail, MapPin, Loader2 } from "lucide-react";
 import { PK_CITIES } from "@/components/seo/LocalBusinessJsonLd";
 import { subscribeEmail } from "@/lib/actions/subscriber.actions";
@@ -139,10 +140,9 @@ const Footer = () => {
           <div className="flex flex-col gap-6 sm:col-span-2 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 group w-fit">
               <div
-                className="p-1.5 rounded-lg"
-                style={{ background: "hsl(var(--primary) / 0.15)", border: "1px solid hsl(var(--primary) / 0.2)" }}
+                className="w-8 h-8 overflow-hidden relative"
               >
-                <Sparkles className="w-5 h-5" style={{ color: "hsl(var(--primary))" }} />
+                <Image src="/assets/images/premiumsolutions.png" alt="Premium Solutions" fill className="object-contain" />
               </div>
               <span
                 className="font-extrabold text-xl tracking-tight text-transparent bg-clip-text"
